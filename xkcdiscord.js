@@ -104,7 +104,7 @@ function getcomic(comicNumber, channel) {
 function htmldecode(s) {
 	if (/&#.+?;/.test(s))
 		return s.replace(/&#.+?;/g, (m) => {
-			return String.fromCharCode(m.replace(/&#/, "").replace(/;/, ""));
+			return String.fromCharCode(m.replace(/&#?/, "").replace(/;/, ""));
 		});
 	else return s;
 }
