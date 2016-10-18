@@ -1,4 +1,7 @@
+// requires discord.js and html-entities
+// npm install (either of those)
 const discord = require('discord.js'),
+	entities = require('html-entities').AllHtmlEntities,
 	fs = require('fs'),
 	http = require('http');
 
@@ -102,7 +105,7 @@ function getcomic(comicNumber, channel) {
 }
 
 function htmldecode(s) {
-	if (/&#.+?;/.test(s))
+	if (/&#?.+?;/.test(s))
 		return s.replace(/&#.+?;/g, (m) => {
 			return String.fromCharCode(m.replace(/&#?/, "").replace(/;/, ""));
 		});
