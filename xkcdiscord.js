@@ -51,6 +51,8 @@ client.on('message', message => {
 		getcomic(id, message.channel);
 	} else if (/^!xkcdinvite/i.test(message.content)) {
 		message.author.sendMessage(`Invite link:\nhttps://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=${permissions}`);
+	} else if (/^!xkcdhelp/i.test(message.content)) {
+		message.author.sendMessage("Here is what I can do for you:\n```\n!xkcd\n  shows the most recent xkcd\n!xkcd <number>\n  shows xkcd <number>\n```");
 	}
 });
 
