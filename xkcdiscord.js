@@ -68,29 +68,30 @@ function getcomic(comicNumber, channel) {
 	console.info(`Requesting ${options.hostname}${options.path}`);
 	var request = http.request(options, (res) => {
 		var data = '';
-		if (res.statusCode == 404) {
-			console.error("404, not found: " + options.hostname + options.path);
-			channel.sendMessage(`:warning: xkcd #${comicNumber} was not found.`);
-		}
 		res.on('data', (chunk) => {
 			data+=chunk;
 		});
 		res.on('end', () => {
 			// handle the data returned here
 			// parse out the title, alt text, and image url from this linel
-			var img = /<img src=".+?" title=".+?" alt=".+?" \/>/.exec(data)[0];
-			
-			var title = img.replace(/^<img src=".+?" title=".+?" alt="/, "")
-				.replace(/" \/>/, "");
-			var imgURL = img.replace(/^<img src="/, "")
-				.replace(/" title=".+?" alt=".+?" \/>/, "");
-			var altText = img.replace(/^<img src=".+?" title="/, "")
-				.replace(/" alt=".+?" \/>/, "");
-			var imgID = /Permanent link to this comic: .+?\/\d+\//.exec(data)[0]
-				.replace(/Perm.+?(?=\d)/, "")
-				.replace(/\//, "");
-			channel.sendMessage(`http:${imgURL}`);
-			channel.sendMessage(`xkcd #${imgID}: **${htmldecode(title)}**\n*${htmldecode(altText)}*`);
+			if (res.statusCode != 404) {
+				var img = /<img src=".+?" title=".+?" alt=".+?" \/>/.exec(data)[0];
+				
+				var title = img.replace(/^<img src=".+?" title=".+?" alt="/, "")
+					.replace(/" \/>/, "");
+				var imgURL = img.replace(/^<img src="/, "")
+					.replace(/" title=".+?" alt=".+?" \/>/, "");
+				var altText = img.replace(/^<img src=".+?" title="/, "")
+					.replace(/" alt=".+?" \/>/, "");
+				var imgID = /Permanent link to this comic: .+?\/\d+\//.exec(data)[0]
+					.replace(/Perm.+?(?=\d)/, "")
+					.replace(/\//, "");
+				channel.sendMessage(`http:${imgURL}`);
+				channel.sendMessage(`xkcd #${imgID}: **${htmldecode(title)}**\n*${htmldecode(altText)}*`);
+			} else {
+				console.error("404, not found: " + options.hostname + options.path);
+				channel.sendMessage(`:warning: xkcd #${comicNumber} was not found.`);
+			}
 		});
 	});
 	request.on('error', (e) => {
