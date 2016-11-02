@@ -38,11 +38,24 @@ console.info(`Invite link:\nhttps://discordapp.com/oauth2/authorize?client_id=${
 
 const client = new discord.Client();
 
+// tests whether or not the channel has a specified permission for the given user
+function hasPermission(channel, permission, user = client.user) {
+	if (channel.type != "dm" && channel.permissionsFor(user).hasPermission(permission))
+		return true;
+	else if (channel.type == "dm")
+		return true;
+	else return false;
+}
+
 client.on('ready', () => {
 	console.info("Client ready.");
 });
 
 client.on('message', message => {
+	if (!hasPermission(message.channel, "SEND_MESSAGES")) {
+		return;
+	}
+	
 	if (/^!xkcd\s*$/i.test(message.content)) {
 		// just get the latest xkcd
 		getcomic(null, message.channel);
