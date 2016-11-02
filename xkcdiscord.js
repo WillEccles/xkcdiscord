@@ -42,8 +42,10 @@ const client = new discord.Client();
 function hasPermission(channel, permission, user = client.user) {
 	if (channel.type != "dm" && channel.permissionsFor(user).hasPermission(permission))
 		return true;
-	else if (channel.type == "dm")
+	else if (channel.type == "dm" && permission != "MANAGE_MESSAGES")
 		return true;
+	else if (channel.type == "dm" && permission == "MANAGE_MESSAGES")
+		return false;
 	else return false;
 }
 
@@ -67,8 +69,13 @@ client.on('message', message => {
 		getcomic(id, message.channel);
 	} else if (/^!xkcdinvite/i.test(message.content)) {
 		message.author.sendMessage(`Invite link:\nhttps://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=${permissions}`);
+		if (hasPermission(message.channel, "MANAGE_MESSAGES"))
+			message.delete();
 	} else if (/^!xkcdhelp/i.test(message.content)) {
-		message.author.sendMessage("Here is what I can do for you:\n```\n!xkcd\n  shows the most recent xkcd\n!xkcd <number>\n  shows xkcd <number>\n```");
+		message.author.sendMessage("Here is what I can do for you:\n```\n!xkcd\n  shows the most recent xkcd\n!xkcd <number>\n  shows xkcd <number>\n!xkcdinvite\n  gives you the invite link to add this bot to your discord server```");
+		if (hasPermission(message.channel, "MANAGE_MESSAGES")) {
+			message.delete();
+		}
 	}
 });
 
