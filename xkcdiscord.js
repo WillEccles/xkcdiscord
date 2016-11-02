@@ -10,6 +10,7 @@ var token = "";
 // permissions for the bot
 var permissions = 0x00000400 | // READ_MESSAGES
 	0x00000800 | // SEND_MESSAGES
+	0x00002000 |
 	0x00004000 | // EMBED_LINKS
 	0x00008000;  // ATTACH_FILES
 
