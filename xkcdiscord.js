@@ -49,8 +49,41 @@ function hasPermission(channel, permission, user = client.user) {
 	else return false;
 }
 
+// message = the message to send
+// priority is one of the following:
+//   'error': This will @me and show it as an error
+//   'normal': This just prints a message
+//   'status': This states the bot's status/what it's doing
+//   'warning': The warning message
+function debugChannelMessage(priority, message) {
+	if (debugChannelID == "") return;
+	switch(priority) {
+		case 'error':
+			client.channels.get(debugChannelID).sendMessage(`:exclamation: **Error:** ${message}\n(cc <!@111943010396229632>)`);
+			break;
+		case 'normal':
+			client.channels.get(debugChannelID).sendMessage(`${message}`);
+			break;
+		case 'status':
+			client.channels.get(debugChannelID).sendMessage(`:information_source: **Bot status:** ${message}`);
+			break;
+		case 'warning':
+			client.channels.get(debugChannelID).sendMessage(`:warning: **Warning:** ${message}\n(cc <@!111943010396229632>)`);
+	}
+}
+
+// these will be used when the ready event fires, so that if the bot has just connected after an error it will tell you what that error was
+var hadError = false;
+var errorMessage = "";
+
 client.on('ready', () => {
 	console.info("Client ready.");
+	debugChannelMessage('status', "Ready");
+	if (hadError && errorMessage != "") {
+		debugChannelMessage('error', `Just recovered from error:\n\`\`\`\n${errorMessage}\n\`\`\``);
+		hadError = false;
+		errorMessage = "";
+	}
 });
 
 client.on('message', message => {
@@ -128,5 +161,19 @@ function htmldecode(s) {
 	var ents = new entities();
 	return ents.decode(s);
 }
+
+client.on('error', (error) => {
+	console.error("Encountered error:\n" + error);
+	hadError = true;
+	errorMessage = error;
+});
+
+client.on('warn', (warning) => {
+	debugChannelMessage('warning', warning);
+});
+
+client.on('disconnect', () => {
+	console.info("Disconnected from Discord, attempting to log in...");
+});
 
 client.login(token);
