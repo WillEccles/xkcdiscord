@@ -13,6 +13,8 @@ var permissions = 0x00000400 | // READ_MESSAGES
 	0x00002000 | // MANAGE_MESSAGES
 	0x00004000 ; // EMBED_LINKS
 
+var debugChannelID = "";
+
 // load stuff
 try {
 	fs.accessSync("config.json", fs.F_OK);
