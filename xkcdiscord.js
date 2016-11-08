@@ -31,6 +31,8 @@ try {
 		console.error("Please set your clientID in config.json.");
 		process.exit(1);
 	}
+	if (settings.debugChannelID)
+		debugChannelID = settings.debugChannelID;
 } catch (e) {
 	console.error("Error reading config.json.");
 	process.exit(1);
