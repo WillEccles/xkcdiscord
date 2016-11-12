@@ -140,9 +140,9 @@ function getcomic(comicNumber, channel) {
 				var title = img.replace(/^<img src=".+?" title=".+?" alt="/, "")
 					.replace(/" .*?\/>/, "");
 				var imgURL = img.replace(/^<img src="/, "")
-					.replace(/" title=".+?" alt=".+?" \/>/, "");
+					.replace(/" title=".+?" alt=".+?" .*?\/>/, "");
 				var altText = img.replace(/^<img src=".+?" title="/, "")
-					.replace(/" alt=".+?" \/>/, "");
+					.replace(/" alt=".+?" .*?\/>/, "");
 				var imgID = /Permanent link to this comic: .+?\/\d+\//.exec(data)[0]
 					.replace(/Perm.+?(?=\d)/, "")
 					.replace(/\//, "");
