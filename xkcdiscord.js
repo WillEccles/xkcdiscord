@@ -135,10 +135,10 @@ function getcomic(comicNumber, channel) {
 			// handle the data returned here
 			// parse out the title, alt text, and image url from this linel
 			if (res.statusCode != 404) {
-				var img = /<img src=".+?" title=".+?" alt=".+?" \/>/.exec(data)[0];
+				var img = /<img src=".+?" title=".+?" alt=".+?" .*?\/>/.exec(data)[0];
 				
 				var title = img.replace(/^<img src=".+?" title=".+?" alt="/, "")
-					.replace(/" \/>/, "");
+					.replace(/" .*?\/>/, "");
 				var imgURL = img.replace(/^<img src="/, "")
 					.replace(/" title=".+?" alt=".+?" \/>/, "");
 				var altText = img.replace(/^<img src=".+?" title="/, "")
