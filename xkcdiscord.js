@@ -63,7 +63,7 @@ function debugChannelMessage(priority, message) {
 	if (debugChannelID == "") return;
 	switch(priority) {
 		case 'error':
-			client.channels.get(debugChannelID).sendMessage(`:exclamation: **Error:** ${message}\n(cc <!@111943010396229632>)`);
+			client.channels.get(debugChannelID).sendMessage(`:exclamation: **Error:** ${message}\n(cc <@111943010396229632>)`);
 			break;
 		case 'normal':
 			client.channels.get(debugChannelID).sendMessage(`${message}`);
@@ -72,7 +72,7 @@ function debugChannelMessage(priority, message) {
 			client.channels.get(debugChannelID).sendMessage(`:information_source: **Bot status:** ${message}`);
 			break;
 		case 'warning':
-			client.channels.get(debugChannelID).sendMessage(`:warning: **Warning:** ${message}\n(cc <@!111943010396229632>)`);
+			client.channels.get(debugChannelID).sendMessage(`:warning: **Warning:** ${message}\n(cc <@111943010396229632>)`);
 	}
 }
 
