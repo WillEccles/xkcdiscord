@@ -3,7 +3,7 @@
 const discord = require('discord.js'),
 	entities = require('html-entities').AllHtmlEntities,
 	fs = require('fs'),
-	http = require('http');
+	https = require('https');
 
 var clientID = "";
 var token = "";
@@ -126,7 +126,7 @@ function getcomic(comicNumber, channel) {
 	if (comicNumber != null)
 		options.path = `/${comicNumber}/index.html`;
 	console.info(`Requesting ${options.hostname}${options.path}`);
-	var request = http.request(options, (res) => {
+	var request = https.request(options, (res) => {
 		var data = '';
 		res.on('data', (chunk) => {
 			data+=chunk;
