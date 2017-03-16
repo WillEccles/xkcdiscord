@@ -181,3 +181,10 @@ client.on('disconnect', () => {
 });
 
 client.login(token);
+
+// gracefully handle the control c
+process.on('SIGINT', () => {
+	console.info("Destroying bot and exiting...");
+	client.destroy();
+	process.exit(0);
+});
