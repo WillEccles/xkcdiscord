@@ -135,21 +135,35 @@ function getcomic(comicNumber, channel) {
 			// handle the data returned here
 			// parse out the title, alt text, and image url from this linel
 			if (res.statusCode != 404) {
-				var comicInfo = JSON.parse(data); // parse the image info into an array
-				
-				channel.sendMessage(comicInfo.img);
-				channel.sendMessage(`xkcd #${comicInfo.num}: **${htmldecode(comicInfo.title)}**\n*${htmldecode(comicInfo.alt)}*`);
+				sendComicEmbed(channel, JSON.parse(data));
 			} else {
 				console.error("404, not found: " + options.hostname + options.path);
-				channel.sendMessage(`:warning: xkcd #${comicNumber} was not found.`);
+				sendComicEmbed(channel, null);
 			}
 		});
 	});
 	request.on('error', (e) => {
 		console.error("Error retrieving data:\n" + e);
-		channel.sendMessage(`:warning: Error when retrieving xkcd #${comicNumber}.`);
+		sendComicEmbed(channel, null);
 	});
 	request.end();
+}
+
+// channel to send embed in
+function sendComicEmbed(channel, comicInfo) {
+	var embed = new discord.RichEmbed();
+	if (comicInfo != null) {
+		// this means we can do things with the comic
+		embed.setColor("#96A8C8"); // background color of the xkcd page :P
+		embed.setTitle("xkcd " + comicInfo.num + ": " + htmldecode(comicInfo.title));
+		embed.setImage(comicInfo.img);
+		embed.setDescription(htmldecode(comicInfo.alt));
+	} else {
+		// error getting the comic, we can do a fancy little red embed thingy
+		embed.setTitle("Error retrieving comic.");
+		embed.setColor("#ff0000");
+	}
+	channel.sendEmbed(embed);
 }
 
 function htmldecode(s) {
